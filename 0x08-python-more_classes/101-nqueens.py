@@ -1,53 +1,52 @@
-import numpy as np
-
-def main():
-    global n
-    n = input("Enter N: ")
-    n = int(n)
-    global board
-    board = np.zeros((n,n), dtype=int)
-    solve_board()
-
-def print_board():
-    print('-'*n)
-    for row in board:
-        for col in row:
-            if col == 1:
-                print ("Q", end = " ")
-            else:
-                print (".", end = " ")
-        print()
+#!/usr/bin/python3
+'''Module for N Queens problem.'''
 
 
-def is_valid(board,i,j,n):
+def isSafe(board, row, col):
+    '''Checks if position is safe from attack.
 
-    if 1 in board[i]: #Checking row
-        return False
-
-    for row in range(0, n): #Checking column
-        if (board[row][j]==1):
+    Args:
+        board: The board state.
+        row: The row to check.
+        col: The colum to check.
+    '''
+    for c in range(col):
+        if board[c] is row or abs(board[c] - row) is abs(c - col):
             return False
-
-    for k in range(0,n):
-        for l in range(0,n):
-            if (k+l==i+j) or (k-l==i-j):
-                if board[k][l]==1:
-                    return False
     return True
 
-def solve_board():
+
+def checkBoard(board, col):
+    '''Checks the board state column by column using backtracking.
+
+    Args:
+        board: The board state.
+        col: The current colum to check.
+    '''
+    n = len(board)
+    if col is n:
+        print(str([[c, board[c]] for c in range(n)]))
+        return
+
     for row in range(n):
-        for col in range(n):
-            if board[row][col] == 0: #no queen
-                if (is_valid (board,row,col,n)):
-                    board[row][col] = 1 #Assigning 1 for queen
-                    if np.count_nonzero(board) == n:
-                      print_board()
-                      return True
-                    solve_board()
-                    board[row][col] = 0
-            else:
-                  return False
+        if isSafe(board, row, col):
+            board[col] = row
+            checkBoard(board, col + 1)
 
 if __name__ == "__main__":
-    main()
+    import sys
+
+    if len(sys.argv) != 2:
+        print("Usage: nqueens N")
+        sys.exit(1)
+    n = 0
+    try:
+        n = int(sys.argv[1])
+    except:
+        print("N must be a number")
+        sys.exit(1)
+    if n < 4:
+        print("N must be at least 4")
+        sys.exit(1)
+    board = [0 for col in range(n)]
+    checkBoard(board, 0)
