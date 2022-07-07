@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """module to read a text file"""
 
-check = 'test.txt'
+# check = 'test.txt'
 
 def read_file(filename=""):
     """reads a text file and prints it to stdout"""
@@ -9,4 +9,4 @@ def read_file(filename=""):
         for line in f:
             print(line, end="")
 
-read_file(check)
+# read_file(check)
